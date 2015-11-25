@@ -12,17 +12,20 @@ module Dcenv
     desc "install", "Install container"
     def install(*args)
       name = args[0]
-      cname = "dcenv-#{name}"
+      cname = to_cname(name)
       
-      # Support -v
       # Support "dcenv install rust schickling/rust"
-      system("docker", "run", "--name", cname, "-dit", name) 
+      system("docker", "run", "--name", cname, "-v", "#{Dir.home}:/root", "-dit", name) 
     end
 
-    desc "exec", "Login to container"
+    desc "uninstall", "Uninstall container"
+    def uninstall(*args)
+      system("docker", "rm", "-f", to_cname(args[0])) 
+    end
+
+    desc "exec", "Login/Execute container"
     def exec(*args)
-      name = args[0]
-      cname = "dcenv-#{name}"
+      cname = to_cname(args[0])
 
       # TODO: Restart if container is stopped
       system("docker", "start", cname)
@@ -30,6 +33,10 @@ module Dcenv
     end
 
     no_tasks do
+      def to_cname(name)
+        "dcenv-#{name}"
+      end
+      
       # Override method for support -h 
       # defined in /lib/thor/invocation.rb
       def invoke_command(task, *args)
