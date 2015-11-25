@@ -10,24 +10,25 @@ module Dcenv
     class_option :help, :type => :boolean, :aliases => '-h', :desc => 'Help message'
 
     desc "install", "Install container"
-    def install
+    def install(*args)
+      name = args[0]
+      cname = "dcenv-#{name}"
+      
       # Support -v
       # Support "dcenv install rust schickling/rust"
-      system("docker", "run", "--name", "dcenv-node", "-dit", "node") 
+      system("docker", "run", "--name", cname, "-dit", name) 
     end
 
     desc "exec", "Login to container"
-    def exec
+    def exec(*args)
+      name = args[0]
+      cname = "dcenv-#{name}"
+
       # TODO: Restart if container is stopped
-      system("docker", "start", "dcenv-node")
-      system("docker", "exec", "-it", "dcenv-node", "/bin/bash")
+      system("docker", "start", cname)
+      system("docker", "exec", "-it", cname, "/bin/bash")
     end
 
-    desc "stop", "Stop container"
-    def stop
-      system("docker", "stop", "dcenv-node")
-    end
-    
     no_tasks do
       # Override method for support -h 
       # defined in /lib/thor/invocation.rb
