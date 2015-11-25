@@ -11,11 +11,15 @@ module Dcenv
 
     desc "install", "Install container"
     def install(*args)
-      name = args[0]
-      cname = to_cname(name)
+      if args.length >= 2
+        cname = to_cname(args[0])
+        iname = args[1]
+      else
+        cname = to_cname(args[0])
+        iname = args[0]
+      end
       
-      # Support "dcenv install rust schickling/rust"
-      system("docker", "run", "--name", cname, "-v", "#{Dir.home}:/root", "-dit", name) 
+      system("docker", "run", "--name", cname, "-v", "#{Dir.home}:/root", "-dit", iname)
     end
 
     desc "uninstall", "Uninstall container"
