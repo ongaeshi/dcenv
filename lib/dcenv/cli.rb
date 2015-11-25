@@ -12,14 +12,14 @@ module Dcenv
     desc "install", "Install container"
     def install(*args)
       if args.length >= 2
-        cname = to_cname(args[0])
+        name = to_cname(args[0])
         iname = args[1]
       else
-        cname = to_cname(args[0])
+        name = to_cname(args[0])
         iname = args[0]
       end
       
-      system("docker", "run", "--name", cname, "-v", "#{Dir.home}:/root", "-dit", iname)
+      system("docker", "run", "--name", name, "-v", "#{Dir.home}:/root", "-dit", iname)
     end
 
     desc "uninstall", "Uninstall container"
@@ -29,11 +29,11 @@ module Dcenv
 
     desc "exec", "Login/Execute container"
     def exec(*args)
-      cname = to_cname(args[0])
+      name = to_cname(args[0])
 
       # TODO: Restart if container is stopped
-      system("docker", "start", cname)
-      system("docker", "exec", "-it", cname, "/bin/bash")
+      system("docker", "start", name)
+      system("docker", "exec", "-it", name, "/bin/bash")
     end
 
     no_tasks do
