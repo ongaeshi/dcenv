@@ -33,7 +33,14 @@ module Dcenv
 
       # TODO: Restart if container is stopped
       system("docker", "start", name)
-      system("docker", "exec", "-it", name, "/bin/bash")
+
+      if args.length > 1
+        cmds = ["docker", "exec", "-it", name]
+        cmds.push args[1..-1]
+        system(*cmds.flatten)
+      else
+        system("docker", "exec", "-it", name, "/bin/bash")
+      end
     end
 
     no_tasks do
