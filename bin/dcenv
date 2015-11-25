@@ -1,3 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'dcenv'
+require 'dcenv/cli'
+
+Dcenv::Cli.start
